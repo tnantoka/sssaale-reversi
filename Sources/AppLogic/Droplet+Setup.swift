@@ -1,6 +1,6 @@
 import Vapor
 
-public let title = "Server-Side Swift as a Live Example"
+public let title = "SSSaaLE (Graphene)"
 
 public func load(_ drop: Droplet) {
     // drop.get { _ in return "hello" }

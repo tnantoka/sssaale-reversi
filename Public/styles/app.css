@@ -7,9 +7,83 @@
     text-decoration: none;
 }
 
-.form-control,
-.btn,
-.card,
-.list-group-item {
-    border-radius: 2px !important;
+.board {
+    margin: auto;
+    border: 1px solid black;
+}
+
+.piece {
+    float: left;
+    border: 1px solid black;
+    padding: 2px;
+}
+
+.disk {
+    border: 1px solid black;
+}
+
+.disk.B {
+    background: black;
+}
+
+.disk.W {
+}
+
+.row0,
+.col0 {
+    background: lightgray;
+}
+
+.guide,
+.disk {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.label {
+    font-size: 32px;
+    font-weight: 100;
+}
+
+.guide {
+    border: 2px solid green;
+    cursor: pointer;
+}
+
+.board {
+    width: 578px;
+}
+
+.piece {
+    width: 64px;
+    height: 64px;
+}
+
+.disk {
+    border-radius: 32px;
+}
+
+.label {
+    line-height: 60px;
+}
+
+@media (max-width: 575px) {
+    .board {
+        width: 290px;
+    }
+
+    .piece {
+        width: 32px;
+        height: 32px;
+    }
+
+    .disk {
+        border-radius: 16px;
+    }
+
+    .label {
+        line-height: 28px;
+        font-size: 16px;
+    }
 }
