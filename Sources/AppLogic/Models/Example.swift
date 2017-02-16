@@ -11,7 +11,6 @@ final class Example: Model {
         return boardString(newBoard)
     }
     var color: Int
-    var history = [String]()
     var snapshot = [Int]()
     var numBlack: Int {
         return newBoard.getNumBlack()
@@ -32,10 +31,6 @@ final class Example: Model {
     let info = NullInfo()
 
     lazy var newBoard: Board = {
-//        for (i, h) in self.history.enumerated() {
-//            let color: Pieces = i % 2 == 0 ? .black : .white
-//            let _ = process(board: board, sfen: h, color: color)
-//        }
         for (i, s) in self.snapshot.enumerated() {
             let y = i / self.board.height()
             let x = i % self.board.height()
@@ -62,7 +57,6 @@ final class Example: Model {
         } else {
             nextBoard = self.process(board: self.board.clone(), sfen: "go", color: .white)
         }
-        self.history.append(self.diff(board1: self.board, board2: nextBoard))
 
         return self.guide(nextBoard)
     }()
@@ -120,7 +114,6 @@ final class Example: Model {
         id = try node.extract("id")
         input = try node.extract("input")
         color = try node.extract("color")
-        history = try node.extract("history")
         snapshot = try node.extract("snapshot")
         strong = try node.extract("strong")
     }
@@ -131,7 +124,6 @@ final class Example: Model {
             "input": input,
             "output": output,
             "color": color,
-            "history": Node.array(history.map { .string($0) }),
             "snapshot": Node.array(boardSnapshot(newBoard).map { .number(Node.Number($0)) }),
             "numBlack" : numBlack,
             "numWhite" : numWhite,
