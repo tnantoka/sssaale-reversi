@@ -2,7 +2,7 @@ class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            example: { input: "", history: [], snapshot: [], strong: false },
+            example: { input: "", color: 1, history: [], snapshot: [], strong: false },
             loading: false,
         }
         this.handleChange = this.handleChange.bind(this)
@@ -13,7 +13,7 @@ class App extends React.Component {
     
     componentDidMount() {
         // this.input.focus()
-        this.post()
+        this.post('', 1)
     }
 
     handleChange(event) {
@@ -29,10 +29,10 @@ class App extends React.Component {
 
     handleClick(e, i, j) {
         e.preventDefault()
-        const { example } = this.state
-        example.input = `${String.fromCharCode(96 + j)}${i}`
-        this.setState({ example })
-        this.post()
+        const input = input
+        this.post(`${String.fromCharCode(96 + j)}${i}`, 1).then(() => {
+            setTimeout(() => this.post('go', 2), 100)
+        })
     }
 
     handleCheck(e) {
@@ -41,13 +41,17 @@ class App extends React.Component {
         this.setState({ example })
     }
 
-    post() {
-        this.setState({ loading: true })
-        const { example } = this.state
+    post(input, color) {
+        const { example, loading } = this.state
+        if (loading) return
+        example.input = input
+        example.color = color
+        this.setState({ example, loading: true })
         
         const headers = new Headers()
         headers.append('Content-Type', 'application/json')
-        fetch('/example', {
+
+        return fetch('/example', {
               method: 'POST',
               headers: headers,
               body: JSON.stringify(example),

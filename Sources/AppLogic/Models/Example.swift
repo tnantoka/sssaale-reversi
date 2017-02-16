@@ -10,6 +10,7 @@ final class Example: Model {
     var output: String {
         return boardString(newBoard)
     }
+    var color: Int
     var history = [String]()
     var snapshot = [Int]()
     var numBlack: Int {
@@ -54,14 +55,16 @@ final class Example: Model {
             self.board.set(color, x: x, y: y)
         }
 
-        guard !self.input.isEmpty else { return self.guide(self.board) }
+        let nextBoard: Board
+        if self.color == 1 {
+            guard !self.input.isEmpty else { return self.guide(self.board) }
+            nextBoard = self.process(board: self.board.clone(), sfen: self.input, color: .black)
+        } else {
+            nextBoard = self.process(board: self.board.clone(), sfen: "go", color: .white)
+        }
+        self.history.append(self.diff(board1: self.board, board2: nextBoard))
 
-        let board1 = self.process(board: self.board.clone(), sfen: self.input, color: .black)
-        self.history.append(self.diff(board1: self.board, board2: board1))
-        let board2 = self.process(board: board1.clone(), sfen: "go", color: .white)
-        self.history.append(self.diff(board1: board1, board2: board2))
-
-        return self.guide(board2)
+        return self.guide(nextBoard)
     }()
 
     func guide(_ board: Board) -> Board {
@@ -116,6 +119,7 @@ final class Example: Model {
     init(node: Node, in context: Context) throws {
         id = try node.extract("id")
         input = try node.extract("input")
+        color = try node.extract("color")
         history = try node.extract("history")
         snapshot = try node.extract("snapshot")
         strong = try node.extract("strong")
@@ -126,6 +130,7 @@ final class Example: Model {
             "id": id,
             "input": input,
             "output": output,
+            "color": color,
             "history": Node.array(history.map { .string($0) }),
             "snapshot": Node.array(boardSnapshot(newBoard).map { .number(Node.Number($0)) }),
             "numBlack" : numBlack,
