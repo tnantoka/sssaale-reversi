@@ -43,22 +43,19 @@ final class Example: Model {
             case 3:
                 color = .empty
             case 4:
-                color = .guide
+                color = .empty // Ignore .guide
             default:
                 color = .none
             }
             self.board.set(color, x: x, y: y)
         }
 
-        let nextBoard: Board
         if self.color == 1 {
             guard !self.input.isEmpty else { return self.guide(self.board) }
-            nextBoard = self.process(board: self.board.clone(), sfen: self.input, color: .black)
+            return self.process(board: self.board.clone(), sfen: self.input, color: .black)
         } else {
-            nextBoard = self.process(board: self.board.clone(), sfen: "go", color: .white)
+            return self.guide(self.process(board: self.board.clone(), sfen: "go", color: .white))
         }
-
-        return self.guide(nextBoard)
     }()
 
     func guide(_ board: Board) -> Board {
