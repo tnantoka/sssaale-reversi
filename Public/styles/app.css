@@ -20,6 +20,7 @@
 
 .disk {
     border: 1px solid black;
+    transition: background .2s linear;
 }
 
 .disk.B {
